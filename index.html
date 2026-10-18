@@ -1,1 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>My Money</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#04070d">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
 
+<div class="photo" id="photo"></div>
+<video class="photo" id="vid" muted loop playsinline autoplay hidden></video>
+
+<main>
+  <section class="hero">
+    <button type="button" class="gear" id="gear" aria-label="Settings">&#9881;</button>
+    <div id="welcome" style="margin:0 0 8px;max-width:calc(100% - 52px)"><span id="wname" style="display:inline-block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:top;padding:5px 14px;border-radius:999px;background:linear-gradient(90deg,var(--g1),var(--g2));color:#fff;font-weight:800;font-size:16px;text-shadow:none"></span></div>
+    <small>Money Left</small>
+    <div class="big" id="left">₱0.00</div>
+    <div class="stats">
+      <div>Money In<b id="tin">₱0.00</b></div>
+      <div>Spent<b id="tout">₱0.00</b></div>
+      <div>Spent Today<b id="today">₱0.00</b></div>
+    </div>
+  <div id="bwarn" class="gline" hidden></div>
+  <div id="goalw" class="gline" hidden><div class="gbar"><i id="gfill"></i></div><span id="gtxt"></span></div>
+  </section>
+
+  <section class="card">
+    <div class="seg">
+      <button type="button" id="bOut" class="on">Expense</button>
+      <button type="button" id="bIn">Money In</button>
+    </div>
+    <div class="row2">
+      <div><label for="amt">Amount</label><input id="amt" type="number" inputmode="decimal" min="0" step="any" placeholder="0.00"></div>
+      <div><label for="date">Date</label><input id="date" type="date"></div>
+    </div>
+    <label id="catLabel">Category</label>
+    <button type="button" class="catbtn" id="catBtn">Pick one</button>
+    <label for="rep">Repeat</label>
+    <select id="rep"><option value="">Never</option><option value="w">Every Week</option><option value="m">Every Month</option></select>
+    <button type="button" class="add" id="add">Add Expense</button>
+  </section>
+
+  <button type="button" class="histbtn" id="histBtn">History</button>
+  <button type="button" class="histbtn" id="debtBtn">Debt</button>
+
+  <input type="file" id="bgFile" accept="image/*,video/*" hidden>
+  <input type="file" id="musicFile" accept="audio/*" hidden>
+  <input type="file" id="bkFile" accept=".json,application/json" hidden>
+  <audio id="aud" loop></audio>
+
+
+
+<div class="sheet" id="catSheet" hidden>
+    <div class="panel">
+      <h2>Pick A Category</h2>
+      <div id="catList"></div>
+      <button type="button" id="catClose" class="close">Close</button>
+    </div>
+  </div>
+
+  <div class="sheet" id="sheet" hidden>
+    <div class="panel">
+      <div class="shead"><div style="display:flex;align-items:center;gap:10px;min-width:0"><button type="button" id="setBack" style="display:none">&larr; Back</button><h2 id="setTitle">Settings</h2></div><button type="button" id="closeSheet">Close</button></div>
+      <div class="sbody">
+      <div class="acc"><button type="button" class="ahead"><span>Your Name</span><span class="ar">&#8250;</span></button>
+      <div class="abody" hidden>
+      <input id="nameIn" maxlength="20" placeholder="Type your name">
+      <div class="hint">This shows at the top of the main screen. Leave it empty to hide it.</div>
+      <button type="button" id="nameSave">Save Name</button>
+      </div></div>
+      <div class="acc"><button type="button" class="ahead"><span>Wallpaper</span><span class="ar">&#8250;</span></button>
+      <div class="abody" hidden>
+      <button type="button" id="bgBtn">Change Wallpaper</button>
+      <div class="setlabel">Video Wallpaper Fit</div>
+      <div class="sizes" id="vfit"><button type="button" class="sz" data-f="fill">Fill Screen</button><button type="button" class="sz" data-f="fit">Show Whole Video</button></div>
+      </div></div>
+      <div class="acc"><button type="button" class="ahead"><span>Button Colors</span><span class="ar">&#8250;</span></button>
+      <div class="abody" hidden>
+      <div class="swatches" id="swatches"></div>
+      <button type="button" id="customBtn" class="cbtn" role="switch" aria-checked="false"><span>Custom Gradient</span><span class="tgwrap"><span id="tgTxt">OFF</span><span class="tg"></span></span></button>
+      <div id="customBox" hidden>
+      <div class="custom"><span>Color 1</span><button type="button" class="cdot" id="d1" aria-label="Pick color 1"></button><span>Color 2</span><button type="button" class="cdot" id="d2" aria-label="Pick color 2"></button></div>
+      <div class="hint">Tap Color 1 or Color 2, then tap a color above or use the brightness slider to change only that color. With neither selected, both change together.</div>
+      <div class="setlabel">Brightness</div>
+      <div class="bright"><span>Dark</span><input type="range" id="bright" min="5" max="95" step="1" value="50" aria-label="Brightness"><span>Light</span></div>
+      </div>
+      </div></div>
+      <div class="acc"><button type="button" class="ahead"><span>Button Size</span><span class="ar">&#8250;</span></button>
+      <div class="abody" hidden>
+      <div class="sizes" id="sizes"><button type="button" class="sz" data-s="s">Small</button><button type="button" class="sz" data-s="m">Medium</button><button type="button" class="sz" data-s="l">Large</button></div>
+      </div></div>
+      <div class="acc"><button type="button" class="ahead"><span>Music</span><span class="ar">&#8250;</span></button>
+      <div class="abody" hidden>
+      <button type="button" id="musicBtn">Choose Music (mp3)</button>
+      <div id="musicRow" hidden>
+        <div class="mctl"><button type="button" class="mini" id="musicPlay">&#9654; Play</button><button type="button" class="mini" id="musicDel">Remove</button></div>
+        <div class="setlabel">Volume</div>
+        <div class="bright"><span>Low</span><input type="range" id="musicVol" min="0" max="1" step="0.05" aria-label="Volume"><span>High</span></div>
+      </div>
+      </div></div>
+      <div class="acc"><button type="button" class="ahead"><span>Goals</span><span class="ar">&#8250;</span></button>
+      <div class="abody" hidden>
+      <div class="bright"><span>Daily Budget &#8369;</span><input type="number" inputmode="decimal" id="gBud" placeholder="0"></div>
+      <div class="bright"><span>Savings Goal &#8369;</span><input type="number" inputmode="decimal" id="gGoal" placeholder="0"></div>
+      <button type="button" id="gSave">Save Goals</button>
+      </div></div>
+      <div class="acc"><button type="button" class="ahead"><span>Recurring Entries</span><span class="ar">&#8250;</span></button>
+      <div class="abody" hidden>
+      <div id="recList"></div>
+      </div></div>
+      <div class="acc"><button type="button" class="ahead"><span>My Categories</span><span class="ar">&#8250;</span></button>
+      <div class="abody" hidden>
+      <div class="bright"><input id="cName" placeholder="Category name" maxlength="20"><input id="cEmo" placeholder="&#128512;" maxlength="2" style="max-width:70px"></div>
+      <div class="mctl"><button type="button" class="mini" id="cAddOut">Add To Expense</button><button type="button" class="mini" id="cAddIn">Add To Money In</button></div>
+      <button type="button" id="catDelOpen">Delete Category</button>
+      <button type="button" id="catRestore">Restore Deleted Default Categories</button>
+      </div></div>
+      <div class="acc"><button type="button" class="ahead"><span>Daily Reminder</span><span class="ar">&#8250;</span></button>
+      <div class="abody" hidden>
+      <div class="bright"><input type="time" id="remT"><button type="button" class="mini" id="remOff">Off</button></div>
+      <div class="hint">Shows a reminder when you open the app after this time and haven't logged any spending today.</div>
+      </div></div>
+      <div class="acc"><button type="button" class="ahead"><span>Security</span><span class="ar">&#8250;</span></button>
+      <div class="abody" hidden>
+      <button type="button" id="pinBtn">Set PIN Lock</button>
+      </div></div>
+      <div class="acc"><button type="button" class="ahead"><span>Backup</span><span class="ar">&#8250;</span></button>
+      <div class="abody" hidden>
+      <div class="mctl"><button type="button" class="mini" id="bkSave">Save Backup</button><button type="button" class="mini" id="bkLoad">Restore</button></div>
+      <button type="button" id="csvBtn">Export To Excel (CSV)</button>
+      <button type="button" id="bkTxt">Backup As Text</button>
+      <button type="button" id="csvTxt">Excel (CSV) As Text</button>
+      </div></div>
+      <button type="button" id="clear" class="danger">Erase All Data</button>
+      </div>
+    </div>
+  </div>
+
+<div class="sheet" id="delSheet" hidden>
+  <div class="panel">
+    <h2>Delete Category</h2>
+    <div class="hint">Tap the categories you want to delete, then tap Delete Selected.</div>
+    <div id="cList"></div>
+    <button type="button" id="catDelSel" class="danger">Delete Selected</button>
+    <button type="button" id="delClose" class="close">Close</button>
+  </div>
+</div>
+
+<div class="sheet" id="txtSheet" hidden>
+  <div class="panel">
+    <h2 id="txtTitle">Backup Text</h2>
+    <div class="hint" id="txtHint"></div>
+    <textarea id="txtArea" rows="9" style="width:100%;margin-top:10px;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.08);color:#fff;font:13px/1.3 monospace"></textarea>
+    <button type="button" id="txtCopy">Copy</button>
+    <button type="button" id="txtRestore">Restore From Text</button>
+    <button type="button" id="txtClose" class="close">Close</button>
+  </div>
+</div>
+</main>
+
+<div id="lock" hidden><div class="lockbox"><h2>My Money</h2><input id="lockIn" type="password" inputmode="numeric" maxlength="4" placeholder="PIN"><button type="button" id="lockBtn">Unlock</button><div id="lockErr"></div></div></div>
+
+<div class="page" id="debt" hidden>
+  <div class="histhead"><button type="button" class="back" id="debtBack">&larr; Back</button><h2>Debt</h2></div>
+  <div class="card">
+    <input id="dWho" placeholder="Name" maxlength="30">
+    <div class="row2" style="margin-top:8px"><input id="dAmt" type="number" inputmode="decimal" placeholder="Amount"><select id="dDir"><option value="to">They Owe Me</option><option value="from">I Owe Them</option></select></div>
+    <input id="dNote" placeholder="Note (optional)" maxlength="40" style="margin-top:8px">
+    <button type="button" class="add" id="dAdd">Add Debt</button>
+  </div>
+  <div class="card" id="debtTot"></div>
+  <div id="debtList"></div>
+</div>
+
+<div id="toast" hidden><span id="toastTxt"></span><button type="button" id="toastBtn">OK</button></div>
+
+<div class="page" id="hist" hidden>
+  <div class="histhead">
+    <button type="button" class="back" id="histBack">&larr; Back</button>
+    <h2>History</h2>
+  </div>
+  <div class="seg" style="margin-top:10px"><button type="button" id="tabH" class="on">History</button><button type="button" id="tabS">Summary</button></div>
+  <div id="histPane">
+  <input id="q" type="search" placeholder="Search: food, 100, 2026-10">
+  <div class="hint">Tap an entry to edit it.</div>
+  <button type="button" id="delAll" style="display:block;width:100%;margin-top:10px;padding:11px;border:1px solid #ff3b5c;border-radius:12px;background:rgba(255,60,80,.28);color:#fff;font:inherit;font-weight:800">Delete All History</button>
+  <div id="list"></div>
+  </div>
+  <div id="sumPane" hidden><div class="card"><select id="sm"></select><div id="sumBody"></div></div></div>
+</div>
+
+<script src="core.js"></script>
+<script src="theme.js"></script>
+<script src="extras.js"></script>
+<script src="features.js"></script>
+<script>if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js").catch(function(){});</script>
+</body>
+                                                                                                           </html>
+  
